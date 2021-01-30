@@ -13,8 +13,9 @@ export default function Stonks() {
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       
       <View>
-        <Text>This is where the majority of the information would go, graphs, predictions. Can also fit some troll mesurements here
-           It can all probably go in one page tbh
+        <Text>
+          This is where the majority of the information would go, graphs, predictions. Can also fit some troll mesurements here
+          It can all probably go in one page tbh
         </Text>
         <Button>Press Me!</Button>
       </View>

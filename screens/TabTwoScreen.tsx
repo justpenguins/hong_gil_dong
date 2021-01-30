@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Button, Container } from '@material-ui/core';
 import { Text, View } from '../components/Themed';
 
-export default function TabTwoScreen() {
+export default function Stonks() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Stock of the Day</Text>

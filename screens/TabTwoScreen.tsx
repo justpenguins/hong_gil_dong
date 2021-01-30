@@ -1,15 +1,23 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import { Button, Container } from '@material-ui/core';
 import { Text, View } from '../components/Themed';
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Stock of the Day</Text>
+
+      <Text style={styles.ticker}>Ticker Symbol (ie. APPL or smth) can go here</Text>
+    
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      
+      <View>
+        <Text>This is where the majority of the information would go, graphs, predictions. Can also fit some troll mesurements here
+           It can all probably go in one page tbh
+        </Text>
+        <Button>Press Me!</Button>
+      </View>
     </View>
   );
 }
@@ -21,8 +29,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 38,
     fontWeight: 'bold',
+  },
+  ticker: {
+    paddingVertical: 30,
+    fontSize: 20,
   },
   separator: {
     marginVertical: 30,

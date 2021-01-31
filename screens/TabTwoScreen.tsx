@@ -38,22 +38,33 @@ const chartConfig = {
     strokeWidth: 2, // optional, default 3
     barPercentage: 1,
     useShadowColorFromDataset: true, // optional
-
 };
 
 export default function Stonks() {
-    const [stock, setStock] = useState('');
+    const [stock, setStock] = useState('Loading stock...');
     const [stockLabels, setStockLabels] = useState<string[]>([]);
     const [stockData, setStockData] = useState<string[]>([]);
     const [stockName, setStockName] = useState('Loading stock...');
     const [stockDesc, setStockDesc] = useState('');
+    const [stockPrice, setStockPrice] = useState('');
 
     useEffect(() => {
-        const fetchData = async () => {
-            const stonk = await getRandomStock();
-            const data = await getStockData(stonk);
-            const info = await getStockInfo(stonk);
-            const timeSeries = data['Time Series (5min)'];
+        const fetchData = async () => {          
+            let stonk = await getRandomStock();
+            let data = await getStockData(stonk);
+            let info = await getStockInfo(stonk);
+            let attempts = 0;
+
+            let timeSeries = data['Time Series (5min)'];
+
+            while (timeSeries === undefined && info['Description'] === undefined && attempts < 5) {
+              stonk = await getRandomStock();
+              data = await getStockData(stonk);
+              info = await getStockInfo(stonk);
+  
+              timeSeries = data['Time Series (5min)'];
+              attempts++;
+            }
 
             const times = map(timeSeries, (val, key) => {
                 return key.split(' ')[1];
@@ -68,19 +79,23 @@ export default function Stonks() {
             setStock(stonk);
             setStockData(amountData);
             setStockName(info['Name']);
-            setStockDesc(info['Description'])
+            setStockDesc(info['Description']);
+            setStockPrice(`Stock price: ${amountData[amountData.length - 1]}`);
         }
         fetchData();
     }, [])
 
     return (
         <View style={styles.container}>
-            <Text style={styles.ticker}>{stock}</Text>
-            <div style={{display: 'block', position: 'absolute', right: "1.75%", top: "1.75%"}}>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <Text style={styles.price}>{stockPrice}</Text>
+              <Text style={styles.ticker}>{stock}</Text>
+              <div style={{display: 'block', position: 'absolute', right: "1.75%", top: "1.75%"}}>
                 <Button style={{color: '#143C1D'}}>Buy</Button>
                 <Button style={{marginLeft: 20, color: '#143c1d'}}>Sell</Button>
+              </div>
             </div>
-
+            
             <View style={styles.data}>
 
                 {/* todo: charts, Data information */}
@@ -114,12 +129,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         overflow: "scroll",
     },
-    data: {
-    },
     ticker: {
+        paddingTop: 10,
         fontSize: 38,
         fontWeight: 'bold',
         textAlign:"center"
+    },
+    price: {
+        paddingTop: 10,
+        fontSize: 30,
+        position: 'absolute',
+        left: "1.75%",
+        top: "1.65%"
     },
     chart: {
         paddingVertical: 20,

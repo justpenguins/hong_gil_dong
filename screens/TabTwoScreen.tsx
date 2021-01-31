@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 import { Dimensions, StyleSheet } from 'react-native';
-import { Button, Container } from '@material-ui/core';
+import { Button, Container } from "@material-ui/core";
 import { Text, View } from '../components/Themed';
-import { LineChart } from 'react-native-chart-kit';
+import { LineChart } from "react-native-chart-kit";
 
 const screenWidth = Dimensions.get("window").width;
 

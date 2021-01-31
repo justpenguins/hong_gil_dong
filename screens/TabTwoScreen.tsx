@@ -6,6 +6,7 @@ import { Text, View } from '../components/Themed';
 import { LineChart } from 'react-native-chart-kit';
 import { API_KEY } from 'react-native-dotenv';
 import _ from 'lodash';
+import map from 'lodash/map';
 
 export async function getStockData(stock: string) {
 	let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stock}&interval=5min&apikey=${API_KEY}`);
@@ -19,7 +20,13 @@ export async function getRandomStock() {
 	return _.sample(stonks);
 }
 
-const screenWidth = Dimensions.get("window").width / 2;
+export async function getStockInfo(stock: string) {
+  let response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stock}&apikey=${API_KEY}`)
+  let stonks = await response.json();
+	return stonks;
+}
+
+const screenWidth = Dimensions.get("window").width;
 
 const chartConfig = {
   backgroundGradientFrom: "#1E2923",
@@ -34,14 +41,32 @@ const chartConfig = {
 
 export default function Stonks() {
   const [stock, setStock] = useState('');
-  const [stockData, setStockData] = useState({});
+  const [stockLabels, setStockLabels] = useState<string[]>([]);
+  const [stockData, setStockData] = useState<string[]>([]);
+  const [stockName, setStockName] = useState('Loading stock...');
+  const [stockDesc, setStockDesc] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       const stonk = await getRandomStock();
       const data = await getStockData(stonk);
+      const info = await getStockInfo(stonk);
+      const timeSeries = data['Time Series (5min)'];
+
+      const times = map(timeSeries, (val, key) => {
+        return key.split(' ')[1];
+      });
+      let rTimes = _.reverse(times);
+      
+      const amountData = map(timeSeries, (val, key) => {
+        return val['1. open'];
+      });
+
+      setStockLabels([]);
       setStock(stonk);
-      setStockData(data);
+      setStockData(amountData);
+      setStockName(info['Name']);
+      setStockDesc(info['Description'])
     }
     fetchData();
   }, [])
@@ -57,17 +82,10 @@ export default function Stonks() {
       <View>
         <LineChart 
           data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
+            labels: stockLabels,
             datasets: [
               {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100
-                ]
+                data: stockData
               }
             ]
           }}
@@ -77,9 +95,8 @@ export default function Stonks() {
           style={styles.chart}
         />
 
-        <Text>
-          This is where the majority of the information would go, graphs, predictions. Can also fit some troll mesurements here
-          It can all probably go in one page tbh
+        <Text style={styles.desc}>
+          {stockDesc}
         </Text>
         <Button>Press Me!</Button>
       </View>
@@ -102,11 +119,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   chart: {
-    paddingVertical: 20
+    paddingVertical: 20,
+    marginLeft: 30,
+    marginRgith: 30,
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  desc: {
+    margin: 20
   },
 });

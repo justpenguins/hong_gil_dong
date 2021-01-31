@@ -9,15 +9,6 @@ import AboutUs from '../screens/TabOneScreen';
 import Stonks from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View, processColor
-} from 'react-native';
-
-import {LineChart} from 'react-native-charts-wrapper';
-
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
@@ -69,17 +60,17 @@ function TabOneNavigator() {
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
-// function TabTwoNavigator() {
-//   return (
-//     <TabTwoStack.Navigator>
-//       <TabTwoStack.Screen
-//         name="TabTwoScreen"
-//         component={Stonks}
-//         options={{ headerTitle: 'Stonks' }}
-//       />
-//     </TabTwoStack.Navigator>
-//   );
-// }
+function TabTwoNavigator() {
+  return (
+    <TabTwoStack.Navigator>
+      <TabTwoStack.Screen
+        name="TabTwoScreen"
+        component={Stonks}
+        options={{ headerTitle: 'Stonks' }}
+      />
+    </TabTwoStack.Navigator>
+  );
+}
 
 // function LandingScreenNavigator() {
 //   return (

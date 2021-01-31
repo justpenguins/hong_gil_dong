@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
-import {Button, Container} from "@material-ui/core";
+import {Button, Dimensions, StyleSheet} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {LineChart} from 'react-native-chart-kit';
 import {API_KEY} from 'react-native-dotenv';
@@ -88,35 +87,20 @@ export default function Stonks() {
     return (
         <View style={styles.container}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-              <Text style={styles.price}>{stockPrice}</Text>
-              <Text style={styles.ticker}>{stock}</Text>
+              <Text style={styles.price}>> 9000</Text>
+              <Text style={styles.ticker}>GME</Text>
               <div style={{display: 'block', position: 'absolute', right: "1.75%", top: "1.75%"}}>
-                <Button style={{color: '#143C1D'}}>Buy</Button>
+                <Button onPress={() => {
+                    alert('You thought.... nice try') }} style={{color: '#143C1D'}}>Buy</Button>
+
                 <Button style={{marginLeft: 20, color: '#143c1d'}}>Sell</Button>
               </div>
             </div>
             
-            <View style={styles.data}>
-
-                {/* todo: charts, Data information */}
-                    <LineChart
-                        data={{
-                            labels: stockLabels,
-                            datasets: [
-                                {
-                                    data: stockData
-                                }
-                            ]
-                        }}
-                        width={screenWidth * 0.9}
-                        height={screenHeight / 2}
-                        chartConfig={chartConfig}
-                        style={styles.chart}
-                    />
-                <Text style={styles.desc}>
-                    {stockDesc}
-                </Text>
-
+            <View style={styles.troll}>
+                <Button onPress={() => {alert('Such actions are under investigation by the SEC. Standby.') }}>
+                    <Text>Click here to manipulate the stock market</Text>
+                </Button>
             </View>
         </View>
     );
@@ -152,5 +136,8 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 20
+    },
+    troll: {
+
     },
 });

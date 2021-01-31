@@ -6,14 +6,6 @@ import { Text, View } from '../components/Themed';
 export default function AboutUs() {
   return (
     <View style={styles.container}>
-<<<<<<< HEAD
-      <Text style={styles.title}>Hong Gil Dong</Text>
-      <Text style={{padding: 20}}>Robin H00d, but a knockoff Asian version</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      
-      <Text></Text>
-
-=======
       <Image style={styles.pic} source={require('../assets/images/stonks.png')} />
 
       <Text style={styles.title}>Who we are</Text>
@@ -25,7 +17,6 @@ export default function AboutUs() {
       <Text style={styles.desc}>If it happens that the stock happens to be GME, we will only allow you to sell.</Text>
       <br />
       <Text style={styles.desc}>HAPPY TRADING!!!</Text>
->>>>>>> b47ccc92ea3fa184e588f18c98bcf194a098edb6
     </View>
   );
 }

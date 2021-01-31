@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { RootStackParamList } from '../types';
-import { Button } from '@material-ui/core';
 
 const onPress = () => {
   

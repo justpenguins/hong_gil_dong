@@ -87,6 +87,7 @@ export default function Stonks() {
     const [price, setPrice] = useState(0.0);
     const [sell, setSell] = useState(false);
     const [sellAmt, setSellAmt] = useState(0.0);
+    const [isGme, setIsGme] = useState(false);
 
     const handleOpen = () => {
       setOpen(true);
@@ -146,6 +147,10 @@ export default function Stonks() {
               info = gmeDesc();
             }
 
+            if (stonk === 'GME') {
+              setIsGme(true);
+            }
+
             const times = map(timeSeries, (val, key) => {
                 return key.split(' ')[1];
             });
@@ -183,14 +188,17 @@ export default function Stonks() {
               aria-labelledby="simple-modal-title"
               aria-describedby="simple-modal-description">
                 <div style={modalStyle} className={classes.paper}>
-                  <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna buy tho</Text>
-                  <br/>
-                  <br/>
-                  <TextField required id="standard-required" label="Amount" defaultValue={amt} onChange={changeIt} />
-                  <br/>
-                  <br/>
-                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`It will cost ${Math.round(amt * price)}. u good with that?`}</Text>
-                  <Button>Purchase Amount</Button>
+                  {isGme ? <Text style={{fontSize: 25, fontWeight: 'bold'}}>LOL YOU THOUGHT YOU COULD BUY THIS? HAHAHAHA</Text> : 
+                  <div>
+                    <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna buy tho</Text>
+                    <br/>
+                    <br/>
+                    <TextField required id="standard-required" label="Amount" defaultValue={amt} onChange={changeIt} />
+                    <br/>
+                    <br/>
+                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`It will cost ${Math.round(amt * price)}. u good with that?`}</Text>
+                    <Button>Purchase Amount</Button>
+                  </div>}
                 </div>
               </Modal>
 

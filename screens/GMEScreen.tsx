@@ -25,8 +25,6 @@ export async function getStockInfo(stock: string) {
     return stonks;
 }
 
-const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
 
 const chartConfig = {
     backgroundGradientFrom: "rgba(20, 60, 30)",
@@ -90,8 +88,7 @@ export default function Stonks() {
               <Text style={styles.price}>> 9000</Text>
               <Text style={styles.ticker}>GME</Text>
               <div style={{display: 'block', position: 'absolute', right: "1.75%", top: "1.75%"}}>
-                <Button onPress={() => {
-                    alert('You thought.... nice try') }} style={{color: '#143C1D'}}>Buy</Button>
+                <Button onPress={() => {alert('You thought.... nice try') }} style={{color: '#143C1D'}}>Buy</Button>
 
                 <Button style={{marginLeft: 20, color: '#143c1d'}}>Sell</Button>
               </div>

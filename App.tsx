@@ -6,8 +6,8 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
-import * as firebaseui from 'firebaseui'
-import 'firebaseui/dist/firebaseui.css'
+import * as firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

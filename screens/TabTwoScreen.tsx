@@ -64,7 +64,7 @@ const screenHeight = Dimensions.get("window").height;
 
 const chartConfig = {
     backgroundGradientFrom: "rgba(20, 60, 30)",
-    backgroundGradientFromOpacity: 0.7,
+    backgroundGradientFromOpacity: 0.8,
     backgroundGradientTo: "black",
     backgroundGradientToOpacity: 1,
     color: (opacity = 1) => `rgba(100, 255, 210, ${opacity})`,

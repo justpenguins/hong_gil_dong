@@ -8,6 +8,7 @@ import {LineChart} from 'react-native-chart-kit';
 import {API_KEY} from 'react-native-dotenv';
 import _ from 'lodash';
 import map from 'lodash/map';
+import { gme, gmeDesc } from './util/lol';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -128,13 +129,21 @@ export default function Stonks() {
 
             let timeSeries = data['Time Series (5min)'];
 
-            while (timeSeries === undefined && info['Description'] === undefined && attempts < 5) {
+            while (timeSeries === undefined && info['Description'] === undefined && info['Description'] === '' && attempts < 5) {
               stonk = await getRandomStock();
               data = await getStockData(stonk);
               info = await getStockInfo(stonk);
   
               timeSeries = data['Time Series (5min)'];
               attempts++;
+            }
+
+            console.log(timeSeries)
+            console.log(info['Description'])
+            if (timeSeries === undefined || info['Description'] === undefined || info['Description'] === '') {
+              stonk = 'GME';
+              data = gme();
+              info = gmeDesc();
             }
 
             const times = map(timeSeries, (val, key) => {
@@ -177,7 +186,7 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna buy tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue="0" onChange={changeIt} />
+                  <TextField required id="standard-required" label="Required" defaultValue={amt} onChange={changeIt} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`It will cost ${Math.round(amt * price)}. u good with that?`}</Text>
@@ -194,7 +203,7 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna sell tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue="0" onChange={changeSell} />
+                  <TextField required id="standard-required" label="Required" defaultValue={sellAmt} onChange={changeSell} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`U will get bac ${Math.round(sellAmt * price)}. u good with that?`}</Text>

@@ -1,10 +1,36 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as React from "react";
+import {useState,useEffect} from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import stockData from "../stockData.json";
 import { DataTable } from 'react-native-paper';
 
 import { RootStackParamList } from '../types';
+
+function getData() {
+  const [data,setData]=useState([]);
+
+const getData=()=>{
+  fetch('../stockData.json'
+  ,{
+    headers : { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+     }
+  }
+  )
+    .then(function(response){
+      console.log(response)
+      return response.json();
+    })
+    .then(function(myJson) {
+      console.log(myJson);
+    });
+}
+useEffect(()=>{
+  getData()
+},[])
+}
 
 
 export default function Portfolio({ navigation

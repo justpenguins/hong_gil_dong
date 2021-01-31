@@ -1,141 +1,165 @@
 import * as React from 'react';
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { Dimensions, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { Button, Container } from "@material-ui/core";
 import { Text, View } from '../components/Themed';
 import { LineChart } from 'react-native-chart-kit';
 import { API_KEY } from 'react-native-dotenv';
+=======
+import {useState, useEffect} from 'react';
+import {Dimensions, StyleSheet} from 'react-native';
+import {Button, Container} from "@material-ui/core";
+import {Text, View} from '../components/Themed';
+import {LineChart} from 'react-native-chart-kit';
+import {API_KEY} from 'react-native-dotenv';
+>>>>>>> b47ccc92ea3fa184e588f18c98bcf194a098edb6
 import _ from 'lodash';
 import map from 'lodash/map';
 
 export async function getStockData(stock: string) {
-	let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stock}&interval=5min&apikey=${API_KEY}`);
-	let json = await response.json();
-	return json;
+    let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stock}&interval=5min&apikey=${API_KEY}`);
+    let json = await response.json();
+    return json;
 }
 
 export async function getRandomStock() {
-	let response = await fetch('https://raybb.github.io/random-stock-picker/stocks.json');
-	let stonks = await response.json();
-	return _.sample(stonks);
+    let response = await fetch('https://raybb.github.io/random-stock-picker/stocks.json');
+    let stonks = await response.json();
+    return _.sample(stonks);
 }
 
 export async function getStockInfo(stock: string) {
-  let response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stock}&apikey=${API_KEY}`)
-  let stonks = await response.json();
-	return stonks;
+    let response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stock}&apikey=${API_KEY}`)
+    let stonks = await response.json();
+    return stonks;
 }
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#000000",
-  backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
+    backgroundGradientFrom: "rgba(20, 60, 30)",
+    backgroundGradientFromOpacity: 0.7,
+    backgroundGradientTo: "black",
+    backgroundGradientToOpacity: 1,
+    color: (opacity = 1) => `rgba(100, 255, 210, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 1,
+    useShadowColorFromDataset: true, // optional
 };
 
 export default function Stonks() {
-  const [stock, setStock] = useState('');
-  const [stockLabels, setStockLabels] = useState<string[]>([]);
-  const [stockData, setStockData] = useState<string[]>([]);
-  const [stockName, setStockName] = useState('Loading stock...');
-  const [stockDesc, setStockDesc] = useState('');
+    const [stock, setStock] = useState('Loading stock...');
+    const [stockLabels, setStockLabels] = useState<string[]>([]);
+    const [stockData, setStockData] = useState<string[]>([]);
+    const [stockName, setStockName] = useState('Loading stock...');
+    const [stockDesc, setStockDesc] = useState('');
+    const [stockPrice, setStockPrice] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const stonk = await getRandomStock();
-      const data = await getStockData(stonk);
-      const info = await getStockInfo(stonk);
-      const timeSeries = data['Time Series (5min)'];
+    useEffect(() => {
+        const fetchData = async () => {          
+            let stonk = await getRandomStock();
+            let data = await getStockData(stonk);
+            let info = await getStockInfo(stonk);
+            let attempts = 0;
 
-      const times = map(timeSeries, (val, key) => {
-        return key.split(' ')[1];
-      });
-      let rTimes = _.reverse(times);
-      
-      const amountData = map(timeSeries, (val, key) => {
-        return val['1. open'];
-      });
+            let timeSeries = data['Time Series (5min)'];
 
-      setStockLabels([]);
-      setStock(stonk);
-      setStockData(amountData);
-      setStockName(info['Name']);
-      setStockDesc(info['Description'])
-    }
-    fetchData();
-  }, [])
+            while (timeSeries === undefined && info['Description'] === undefined && attempts < 5) {
+              stonk = await getRandomStock();
+              data = await getStockData(stonk);
+              info = await getStockInfo(stonk);
+  
+              timeSeries = data['Time Series (5min)'];
+              attempts++;
+            }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Stock of the Day</Text>
-        <Text style={styles.ticker}>{stock}</Text>
-        <Text style={{textAlign: 'center', padding: 10,}}>(grpah shows one year trends)</Text>
-      </View>
+            const times = map(timeSeries, (val, key) => {
+                return key.split(' ')[1];
+            });
+            let rTimes = _.reverse(times);
 
-      <ScrollView>
-        <LineChart 
-          data={{
-            labels: stockLabels,
-            datasets: [
-              {
-                data: stockData
-              }
-            ]
-          }}
-          width={800}
-          height={250}
-          chartConfig={chartConfig}
-          style={styles.chart}
-        />
+            const amountData = map(timeSeries, (val, key) => {
+                return val['1. open'];
+            });
 
-        <Text style={styles.desc}>
-          {stockDesc}
-        </Text>
-        
-      </ScrollView>
-    </SafeAreaView>
-  );
+            setStockLabels([]);
+            setStock(stonk);
+            setStockData(amountData);
+            setStockName(info['Name']);
+            setStockDesc(info['Description']);
+            setStockPrice(`Stock price: ${amountData[amountData.length - 1]}`);
+        }
+        fetchData();
+    }, [])
+
+    return (
+        <View style={styles.container}>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <Text style={styles.price}>{stockPrice}</Text>
+              <Text style={styles.ticker}>{stock}</Text>
+              <div style={{display: 'block', position: 'absolute', right: "1.75%", top: "1.75%"}}>
+                <Button style={{color: '#143C1D'}}>Buy</Button>
+                <Button style={{marginLeft: 20, color: '#143c1d'}}>Sell</Button>
+              </div>
+            </div>
+            
+            <View style={styles.data}>
+
+                {/* todo: charts, Data information */}
+                    <LineChart
+                        data={{
+                            labels: stockLabels,
+                            datasets: [
+                                {
+                                    data: stockData
+                                }
+                            ]
+                        }}
+                        width={screenWidth * 0.9}
+                        height={screenHeight / 2}
+                        chartConfig={chartConfig}
+                        style={styles.chart}
+                    />
+                <Text style={styles.desc}>
+                    {stockDesc}
+                </Text>
+
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#eeeee",
-  },
-  title: {
-    fontSize: 38,
-    fontWeight: 'bold',
-    opacity: 1,
-  },
-  ticker: {
-    paddingVertical: 10,
-    fontSize: 20,
-    textAlign: 'center',
-    opacity: 1,
-  },
-  titleContainer: {
-    opacity: 0.25,
-  },
-  chart: {
-    paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: "center",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-  desc: {
-    margin: 20
-  },
+    container: {
+        marginHorizontal: "4.5%",
+        alignItems: 'center',
+        justifyContent: "center",
+        overflow: "scroll",
+    },
+    ticker: {
+        paddingTop: 10,
+        fontSize: 38,
+        fontWeight: 'bold',
+        textAlign:"center"
+    },
+    price: {
+        paddingTop: 10,
+        fontSize: 30,
+        position: 'absolute',
+        left: "1.75%",
+        top: "1.65%"
+    },
+    chart: {
+        paddingVertical: 20,
+    },
+    desc: {
+        padding: 20,
+        fontSize: 16,
+        lineHeight: '160%'
+    },
+    button: {
+        padding: 20
+    },
 });

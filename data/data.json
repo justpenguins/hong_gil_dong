@@ -1,0 +1,14 @@
+{
+  "stocks": [
+    {
+      "name": "GME" ,
+      "amount": 7
+    },
+    {
+      "name": "YUM",
+      "amount": 16
+    }
+  ],
+  "money": 4832
+
+}

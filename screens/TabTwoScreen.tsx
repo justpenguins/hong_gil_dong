@@ -8,6 +8,9 @@ import {LineChart} from 'react-native-chart-kit';
 import {API_KEY} from 'react-native-dotenv';
 import _ from 'lodash';
 import map from 'lodash/map';
+import Parser from "./util/Parser";
+import {Stock, UserInfo} from "../user/UserInfo";
+//import * as fileData from "../data/data.json"
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -24,6 +27,7 @@ function getModalStyle() {
   };
 }
 
+//const data: UserInfo = fileData;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -157,6 +161,69 @@ export default function Stonks() {
         fetchData();
     }, [])
 
+    function sellAmount(amount: number) {
+        let data = Parser.readFromFile();
+        for(let stock of data.stocks) {
+            if (stock.name === stockName) {
+                if (stock.amount < amount) {
+                    return <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description">
+                        <div style={modalStyle} className={classes.paper}>
+                            <Text style={{fontSize: 25, fontWeight: 'bold'}}>U ain't got enough to sell man</Text>
+                        </div>
+                    </Modal>
+                }   else {
+                    stock.amount -= amount * price;
+                    data.money += amount * price
+                    Parser.writeToFile(data);
+                    return <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description">
+                        <div style={modalStyle} className={classes.paper}>
+                            <Text style={{fontSize: 25, fontWeight: 'bold'}}>Aight here you go!</Text>
+                        </div>
+                    </Modal>
+                }
+
+            }
+        }
+    }
+
+    function buyAmount(amt: number) {
+        let data = Parser.readFromFile();
+        console.log(data)
+        if (data.money < amt * price) {
+            return;     //not enough money
+        }
+        for(let stock of data.stocks) {
+            if (stock.name === stockName) {
+                stock.amount+= amt;
+                data.money -= amt*price;
+                Parser.writeToFile(data);
+                    return <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description">
+                        <div style={modalStyle} className={classes.paper}>
+                            <Text style={{fontSize: 25, fontWeight: 'bold'}}>U ain't got enough to sell man</Text>
+                        </div>
+                    </Modal>
+                }
+            }
+        data.stocks.push({
+            name: stockName,
+            amount: amt
+        })
+        data.money -= amt*price;
+        Parser.writeToFile(data);
+    }
+
     return (
         <View style={styles.container}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -177,11 +244,11 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna buy tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue="0" onChange={changeIt} />
+                  <TextField required type="number" name="amt" id="standard-required" label="Required" defaultValue="0" onChange={changeIt} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`It will cost ${Math.round(amt * price)}. u good with that?`}</Text>
-                  <Button>Purchase Amount</Button>
+                  <Button onClick={()=>buyAmount(amt)}>Purchase Amount</Button>
                 </div>
               </Modal>
 
@@ -194,15 +261,15 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna sell tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue="0" onChange={changeSell} />
+                  <TextField required type="number" name="sellAmt" id="standard-required" label="Required" defaultValue="0" onChange={changeSell} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`U will get bac ${Math.round(sellAmt * price)}. u good with that?`}</Text>
-                  <Button>Sell Amount</Button>
+                  <Button onClick={()=>sellAmount(sellAmt)}>Sell Amount</Button>
                 </div>
               </Modal>
             
-            <View style={styles.data}>
+            <View>
 
                 {/* todo: charts, Data information */}
                     <LineChart

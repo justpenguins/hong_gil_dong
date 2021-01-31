@@ -186,7 +186,7 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna buy tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue={amt} onChange={changeIt} />
+                  <TextField required id="standard-required" label="Amount" defaultValue={amt} onChange={changeIt} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`It will cost ${Math.round(amt * price)}. u good with that?`}</Text>
@@ -203,7 +203,7 @@ export default function Stonks() {
                   <Text style={{fontSize: 25, fontWeight: 'bold'}}>Ok how many u wanna sell tho</Text>
                   <br/>
                   <br/>
-                  <TextField required id="standard-required" label="Required" defaultValue={sellAmt} onChange={changeSell} />
+                  <TextField required id="standard-required" label="Amount" defaultValue={sellAmt} onChange={changeSell} />
                   <br/>
                   <br/>
                   <Text style={{fontSize: 18, fontWeight: 'bold'}}>{`U will get bac ${Math.round(sellAmt * price)}. u good with that?`}</Text>

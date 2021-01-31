@@ -1,0 +1,23 @@
+export const stockData = [
+    {
+      company: "Twitter Inc",
+      ticker: "TWTR",
+      amtSharesBought: "10",
+      stockPrice: "22.76 USD",
+      totalPrice: "227.6 USD"
+    },
+    {
+      company: "Square Inc",
+      ticker: "SQ",
+      amtSharesBought: "10",
+      stockPrice: "45.28 USD",
+      totalPrice: "452.80 USD"
+    },
+    {
+      company: "Shopify Inc",
+      ticker: "SHOP",
+      amtSharesBought: "10",
+      stockPrice: "341.79 USD",
+      totalPrice: "3417.90 USD",
+    },
+];

@@ -1,21 +1,18 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import TextField from '@material-ui/core/TextField';
-import { CommonActions, NavigationContainer } from '@react-navigation/native';
+import stockData from "../stockData.json";
 import { DataTable } from 'react-native-paper';
 
 import { RootStackParamList } from '../types';
 
-const onPress = () => {
-  
-}
 
 export default function Portfolio({ navigation
  }: StackScreenProps<RootStackParamList, 'NotFound'>) {
   return (
     <DataTable style={styles.table}>
     <DataTable.Header>
+      <DataTable.Title>Company Name</DataTable.Title>
       <DataTable.Title>Ticker</DataTable.Title>
       <DataTable.Title sortDirection='descending' numeric>Date Bought</DataTable.Title>
       <DataTable.Title numeric>Amount Bought</DataTable.Title>
@@ -24,6 +21,7 @@ export default function Portfolio({ navigation
     </DataTable.Header>
 
     <DataTable.Row>
+      <DataTable.Cell>Telsa</DataTable.Cell>
       <DataTable.Cell>TSLA</DataTable.Cell>
       <DataTable.Cell numeric>159</DataTable.Cell>
       <DataTable.Cell numeric>6.0</DataTable.Cell>
@@ -32,6 +30,7 @@ export default function Portfolio({ navigation
     </DataTable.Row>
 
     <DataTable.Row>
+      <DataTable.Cell>GameStop</DataTable.Cell>
       <DataTable.Cell>GME</DataTable.Cell>
       <DataTable.Cell numeric>110</DataTable.Cell>
       <DataTable.Cell numeric>8.0</DataTable.Cell>
@@ -40,6 +39,7 @@ export default function Portfolio({ navigation
     </DataTable.Row>
 
     <DataTable.Row>
+      <DataTable.Cell>Apple</DataTable.Cell>
       <DataTable.Cell>APPL</DataTable.Cell>
       <DataTable.Cell numeric>237</DataTable.Cell>
       <DataTable.Cell numeric>8.0</DataTable.Cell>

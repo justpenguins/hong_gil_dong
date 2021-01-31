@@ -8,9 +8,13 @@ import {LineChart} from 'react-native-chart-kit';
 import {API_KEY} from 'react-native-dotenv';
 import _ from 'lodash';
 import map from 'lodash/map';
+
 import Parser from "./util/Parser";
 import {Stock, UserInfo} from "../user/UserInfo";
 //import * as fileData from "../data/data.json"
+
+import { gme, gmeDesc } from './util/lol';
+
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -67,7 +71,7 @@ const screenHeight = Dimensions.get("window").height;
 
 const chartConfig = {
     backgroundGradientFrom: "rgba(20, 60, 30)",
-    backgroundGradientFromOpacity: 0.7,
+    backgroundGradientFromOpacity: 0.8,
     backgroundGradientTo: "black",
     backgroundGradientToOpacity: 1,
     color: (opacity = 1) => `rgba(100, 255, 210, ${opacity})`,
@@ -132,13 +136,21 @@ export default function Stonks() {
 
             let timeSeries = data['Time Series (5min)'];
 
-            while (timeSeries === undefined && info['Description'] === undefined && attempts < 5) {
+            while (timeSeries === undefined && info['Description'] === undefined && info['Description'] === '' && attempts < 5) {
               stonk = await getRandomStock();
               data = await getStockData(stonk);
               info = await getStockInfo(stonk);
   
               timeSeries = data['Time Series (5min)'];
               attempts++;
+            }
+
+            console.log(timeSeries)
+            console.log(info['Description'])
+            if (timeSeries === undefined || info['Description'] === undefined || info['Description'] === '') {
+              stonk = 'GME';
+              data = gme();
+              info = gmeDesc();
             }
 
             const times = map(timeSeries, (val, key) => {

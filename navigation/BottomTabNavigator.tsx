@@ -5,9 +5,10 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import Portfolio from '../screens/PortfolioScreen';
 import AboutUs from '../screens/TabOneScreen';
 import Stonks from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -28,6 +29,13 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Stock O' Day"
         component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <AntDesign name="linechart" size={24} color="black" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Portfolio"
+        component={TabThreeNavigator}
         options={{
           tabBarIcon: ({ color }) => <AntDesign name="linechart" size={24} color="black" />,
         }}
@@ -69,6 +77,20 @@ function TabTwoNavigator() {
         options={{ headerTitle: 'Stonks' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const TabThreeStack = createStackNavigator<TabThreeParamList>();
+
+function TabThreeNavigator() {
+  return (
+    <TabThreeStack.Navigator>
+      <TabThreeStack.Screen
+        name="TabThreeScreen"
+        component={Portfolio}
+        options={{ headerTitle: 'Portfolio' }}
+      />
+    </TabThreeStack.Navigator>
   );
 }
 
